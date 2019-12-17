@@ -78,9 +78,9 @@ func ExpandPorts(port string) ([]string, error) {
 
 // SingleTarget is an atomic entity to attempt a connection
 type SingleTarget struct {
-	Addr  string `json:"addr"`
-	Port  int    `json:"port"`
-	Proto string `json:"proto"`
+	Addr  string
+	Port  int
+	Proto string
 }
 
 // AllTargets holds the exploded arguments which are used for the Cartesian
