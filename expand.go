@@ -9,6 +9,7 @@ import (
 func ExpandAddrs(addrs string) ([]string, error) {
 	// Discrete IP addresses, comma seperated.
 	if strings.Contains(addrs, ",") {
+		addrs = strings.ReplaceAll(addrs, " ", "")
 		return expandCommaDelim(addrs), nil
 		// CIDR that needs expanded
 	} else if strings.Contains(addrs, "/") {
@@ -68,6 +69,7 @@ func ExpandPorts(port string) ([]string, error) {
 		}
 
 	} else if strings.Contains(port, ",") {
+		port = strings.ReplaceAll(port, " ", "")
 		return expandCommaDelim(port), nil
 	} else {
 		ports = []string{port}
