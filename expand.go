@@ -1,6 +1,7 @@
 package expandaddr
 
 import (
+	"errors"
 	"net"
 	"strconv"
 	"strings"
@@ -73,6 +74,52 @@ func ExpandPorts(port string) ([]string, error) {
 		return expandCommaDelim(port), nil
 	} else {
 		ports = []string{port}
+	}
+	return ports, nil
+}
+
+func ExpandPortsString(port string) ([]string, error) {
+	return ExpandPorts(port)
+
+}
+
+func ExpandPortsInt(port string) ([]int, error) {
+	var ports []int
+	if strings.Contains(port, "-") {
+		ranges := strings.Split(port, "-")
+		start, err := strconv.Atoi(ranges[0])
+		if err != nil {
+			return nil, err
+		}
+		end, err := strconv.Atoi(ranges[1])
+		if err != nil {
+			return nil, err
+		}
+		if end > maxPort {
+			end = maxPort
+		}
+		for i := start; i <= end; i++ {
+			ports = append(ports, i)
+		}
+
+	} else if strings.Contains(port, ",") {
+		port = strings.ReplaceAll(port, " ", "")
+		portStr := expandCommaDelim(port)
+
+		for _, v := range portStr {
+			casted, err := strconv.Atoi(v)
+			if err != nil {
+				continue
+			} else {
+				ports = append(ports, casted)
+			}
+		}
+	} else {
+		casted, err := strconv.Atoi(port)
+		if err != nil {
+			return ports, errors.New("No valid ports specified: " + err.Error())
+		}
+		ports = []int{casted}
 	}
 	return ports, nil
 }
