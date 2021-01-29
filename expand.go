@@ -117,7 +117,7 @@ func ExpandPortsInt(port string) ([]int, error) {
 	} else {
 		casted, err := strconv.Atoi(port)
 		if err != nil {
-			return ports, errors.New("No valid ports specified")
+			return ports, errors.New("No valid ports specified: " + err.Error())
 		}
 		ports = []int{casted}
 	}
