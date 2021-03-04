@@ -19,12 +19,14 @@ type AllTargets struct {
 
 // Load builds out atomic targets
 func (at *AllTargets) Load(output chan SingleTarget, wg *sync.WaitGroup) {
+	// block for the duration of loading
+	wg.Add(1)
 	for _, proto := range at.Protos {
 		for _, port := range at.Ports {
 			for _, addr := range at.Addrs {
 				output <- SingleTarget{Addr: addr, Port: port, Proto: proto}
-				wg.Add(1)
 			}
 		}
 	}
+	wg.Done()
 }
